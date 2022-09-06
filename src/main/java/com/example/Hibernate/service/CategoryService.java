@@ -2,36 +2,35 @@ package com.example.Hibernate.service;
 
 import com.example.Hibernate.dao.Category;
 import com.example.Hibernate.repositories.CategoryRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
+import java.util.Arrays;
 
 @Service
 public class CategoryService {
 
-    @Autowired
-    private CategoryRepo categoryRepo;
+   private final CategoryRepo categoryRepo;
 
     public CategoryService(CategoryRepo categoryRepo) {
         this.categoryRepo = categoryRepo;
     }
 
-    public CategoryRepo getCategoryRepo() {
-        return categoryRepo;
-    }
-
-    public void setCategoryRepo(CategoryRepo categoryRepo) {
-        this.categoryRepo = categoryRepo;
-    }
 
     @PostConstruct
-    void init() {
+    void init(Category category) {
         Category accessories = new Category("accessories");
         Category clothing = new Category("clothing");
         Category footwear = new Category("spot shoes");
-        categoryRepo.saveAll(List.of(accessories, clothing, footwear));
+        categoryRepo.saveAll(Arrays.asList(accessories, clothing, footwear));
+    }
+
+    public Category createCategory(Category category) {
+        return categoryRepo.save(category);
+    }
+
+    public Iterable<Category> getCategory() {
+        return categoryRepo.findAll();
     }
 
 }

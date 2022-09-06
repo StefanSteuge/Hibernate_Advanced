@@ -2,37 +2,34 @@ package com.example.Hibernate.service;
 
 import com.example.Hibernate.dao.Product;
 import com.example.Hibernate.repositories.ProductRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class ProductService {
 
-    @Autowired
-    private ProductRepo productRepo;
+    private final ProductRepo productRepo;
 
     public ProductService(ProductRepo productRepo) {
         this.productRepo = productRepo;
     }
 
-    public ProductRepo getProductRepo() {
-        return productRepo;
+    void init(Product product) {
+        Product belt = new Product("Leather belt", BigDecimal.valueOf(45));
+        Product tShirt = new Product("T-shirt", BigDecimal.valueOf(32));
+        Product shoes = new Product("Sneakers", BigDecimal.valueOf(84));
+        productRepo.saveAll(Arrays.asList(belt,tShirt,shoes));
     }
 
-    public void setProductRepo(ProductRepo productRepo) {
-        this.productRepo = productRepo;
+    public Product createProduct(Product product){
+            return productRepo.save(product);
     }
 
-    @PostConstruct
-    void init() {
-        Product belt = new Product("Leather Belt", new BigDecimal(45));
-        Product tShirt = new Product("T-shirt", new BigDecimal(32));
-        Product shoes = new Product("Sneakers", new BigDecimal(84));
-        productRepo.saveAll(List.of(shoes, belt, tShirt));
+    public Iterable<Product> getProducts(){
+        return productRepo.findAll();
     }
 
 }
